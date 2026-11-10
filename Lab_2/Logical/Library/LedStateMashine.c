@@ -9,13 +9,6 @@
 	};
 #endif
 
-/*
- * Индикация положения двери 
- * state - состояние двери (DoorStates), led1..led4 -> индикаторы S0..S3.
- * В ST_UNKNOWN все индикаторы мигают с частотой 1 Гц (500 мс горят / 500 мс нет).
- * cycleTime - время цикла задачи в мс (передаётся из программы, см. Main.c).
- * timer - текущее время внутри полупериода мигания, мс.
- */
 static void SetLeds(struct LedStateMashine* inst, BOOL l1, BOOL l2, BOOL l3, BOOL l4)
 {
 	inst->led1 = l1;
@@ -26,6 +19,10 @@ static void SetLeds(struct LedStateMashine* inst, BOOL l1, BOOL l2, BOOL l3, BOO
 
 void LedStateMashine(struct LedStateMashine* inst)
 {
+	UDINT dt = inst->cycleTime;
+	if (dt == 0)
+		dt = 100;
+
 	switch (inst->state)
 	{
 		case ST_UNKNOWN:

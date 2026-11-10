@@ -5,8 +5,16 @@
 	#include <AsDefault.h>
 #endif
 
+static RTInfo_typ rtInfo;
+
 void _INIT ProgramInit(void)
 {
+	rtInfo.enable = 1;
+	RTInfo(&rtInfo);
+	ledSM.cycleTime = rtInfo.cycle_time / 1000;
+	if (ledSM.cycleTime == 0)
+		ledSM.cycleTime = 100;
+
 	stateMachine.enable   = 0;
 	stateMachine.speedSet = 0;
 	stateMachine.command  = CMD_SHUTDOWN;
@@ -22,26 +30,15 @@ void _INIT ProgramInit(void)
 	ledSM.led4  = 0;
 }
 
-
 void _CYCLIC ProgramCyclic(void)
 {
-	/* 1. Логика двери: датчики и тумблер приходят через мэпинг*/
 	doorSM.state = stateMachine.state;
 	DoorStateMashine(&doorSM);
 
-	/* 2. Управление частотным преобразователем */
 	stateMachine.enable   = 1;
 	stateMachine.speedSet = doorSM.speed;
-	DriveStateMashine(&stateMachine);   
+	DriveStateMashine(&stateMachine);
 
-	/* 3. Индикация положения двери */
 	ledSM.state = (UINT)doorSM.doorState;
-	LedStateMashine(&ledSM);            
+	LedStateMashine(&ledSM);
 }
-
-
-void _EXIT ProgramExit(void)
-{
-
-}
-

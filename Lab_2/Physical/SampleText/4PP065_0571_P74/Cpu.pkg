@@ -10,7 +10,6 @@
     <Object Type="Package">Connectivity</Object>
     <Object Type="Package">TextSystem</Object>
     <Object Type="Package">AccessAndSecurity</Object>
-    <Object Type="Package">Motion</Object>
   </Objects>
   <Configuration ModuleId="4PP065.0571-P74">
     <AutomationRuntime Version="D4.52" />
